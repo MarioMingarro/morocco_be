@@ -28,6 +28,13 @@ for (i in natural){
   }
 }
 
+natural <- raster::extract(raster_natural_2015, shp, fun = mean, df= T)
+
+
+natural <- left_join(natural, raster::extract(raster_natural_2040, shp, fun = mean, df= T), by = "ID")
+
+natural2 <- raster::extract(raster_natural_2040, shp, fun = mean, df= T)
+
 writeRaster(raster_natural_2015, "D:/MARRUECOS/TEST_MAPS/raster_natural_2015.tif")
 writeRaster(raster_natural_2020, "D:/MARRUECOS/TEST_MAPS/raster_natural_2020.tif")
 writeRaster(raster_natural_2025, "D:/MARRUECOS/TEST_MAPS/raster_natural_2025.tif")
@@ -38,10 +45,7 @@ writeRaster(raster_natural_2040, "D:/MARRUECOS/TEST_MAPS/raster_natural_2040.tif
 
 plot(raster_forest_2015)
 plot(raster_forest_2050)
-Forest <- raster::extract(raster_forest_2015, shp, fun = mean, df= T)
-Forest2 <- raster::extract(raster_forest_2040, shp, fun = mean, df= T)
 
-Forest3 <- left_join(Forest, Forest2, by = "ID")
 
 
 ## Non irrigated crop ----
