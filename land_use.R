@@ -14,7 +14,7 @@ non_irrigated_crop <- c("PFT15", "PFT17", "PFT19", "PFT21", "PFT23", "PFT25", "P
 years <- c("2015", "2040")
 years <- c("2015", "2020", "2025", "2030", "2035", "2040")
 
-## Forest ----
+## Natural ----
 raster_natural <- raster::stack()
 
 for (i in natural){
@@ -27,17 +27,51 @@ for (i in natural){
     assign(paste0("raster_natural_", j), calc(raster_natural, max))
   }
 }
-
-raster_natural <- raster::stack()
-for (i in natural){
-    raster <- raster(paste0("D:/DATA/land_use/Project ID 68344/GCAM-Demeter-LU/GCAM_Demeter_LU_ssp1_rcp26_modelmean_2030.nc"),
+## Irrigated crop ------
+raster_irrigated_crop <- raster::stack()
+for (i in irrigated_crop){
+    raster <- raster(paste0("D:/DATA/land_use/Project ID 68344/GCAM-Demeter-LU/GCAM_Demeter_LU_ssp1_rcp26_modelmean_2040.nc"),
                      varname = paste0(i))
     raster <- t(flip(raster, direction = 'y'))
     raster <- mask(crop(raster, shp), shp)
-    raster_natural <- stack(raster_natural, raster)
-    assign(paste0("raster_natural_2030"), calc(raster_natural, max))
+    raster_irrigated_crop <- stack(raster_irrigated_crop, raster)
+    assign(paste0("raster_irrigated_crop_2040"), calc(raster_irrigated_crop, max))
 }
 
+irrigated_crop <- raster::extract(raster_irrigated_crop_2015, shp, fun = mean, df= T)
+
+irrigated_crop <- left_join(irrigated_crop, raster::extract(raster_irrigated_crop_2040, shp, fun = mean, df= T), by = "ID")
+
+## Non irrigated crop ----
+raster_non_irrigated_crop <- raster::stack()
+for (i in non_irrigated_crop){
+  raster <- raster(paste0("D:/DATA/land_use/Project ID 68344/GCAM-Demeter-LU/GCAM_Demeter_LU_ssp1_rcp26_modelmean_2040.nc"),
+                   varname = paste0(i))
+  raster <- t(flip(raster, direction = 'y'))
+  raster <- mask(crop(raster, shp), shp)
+  raster_non_irrigated_crop <- stack(raster_non_irrigated_crop, raster)
+  assign(paste0("raster_non_irrigated_crop_2040"), calc(raster_non_irrigated_crop, max))
+}
+
+non_irrigated_crop <- raster::extract(raster_non_irrigated_crop_2015, shp, fun = mean, df= T)
+
+non_irrigated_crop <- left_join(non_irrigated_crop, raster::extract(raster_non_irrigated_crop_2040, shp, fun = mean, df= T), by = "ID")
+
+#####################################
+
+raster_natural <- raster::stack()
+for (i in natural){
+  raster <- raster(paste0("D:/DATA/land_use/Project ID 68344/GCAM-Demeter-LU/GCAM_Demeter_LU_ssp1_rcp26_modelmean_2030.nc"),
+                   varname = paste0(i))
+  raster <- t(flip(raster, direction = 'y'))
+  raster <- mask(crop(raster, shp), shp)
+  raster_natural <- stack(raster_natural, raster)
+  assign(paste0("raster_natural_2030"), calc(raster_natural, max))
+}
+
+natural <- raster::extract(raster_natural_2015, shp, fun = mean, df= T)
+
+natural <- left_join(natural, raster::extract(raster_natural_2040, shp, fun = mean, df= T), by = "ID")
 
 plot(raster_natural_2015)
 plot(raster_natural_2040)
@@ -45,13 +79,11 @@ plot(raster)
 
 shp_df <- as(shp, "data.frame")
 
-natural <- raster::extract(raster_natural_2015, shp, fun = mean, df= T)
 
-natural <- left_join(natural, raster::extract(raster_natural_2040, shp, fun = mean, df= T), by = "ID")
 
 library("writexl")
 
-write_xlsx(natural, "D:/MARRUECOS/Results/natural.xlsx")
+write_xlsx(non_irrigated_crop, "D:/MARRUECOS/Results/non_irrigated_crop.xlsx")
 
 colnames(natural) <- c("ID", "y_2015", "y_2020", "y_2025", "y_2030", "y_2035", "y_2040")
 
