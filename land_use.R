@@ -28,10 +28,37 @@ for (i in natural){
   }
 }
 
+raster_natural <- raster::stack()
+for (i in natural){
+    raster <- raster(paste0("D:/DATA/land_use/Project ID 68344/GCAM-Demeter-LU/GCAM_Demeter_LU_ssp1_rcp26_modelmean_2030.nc"),
+                     varname = paste0(i))
+    raster <- t(flip(raster, direction = 'y'))
+    raster <- mask(crop(raster, shp), shp)
+    raster_natural <- stack(raster_natural, raster)
+    assign(paste0("raster_natural_2030"), calc(raster_natural, max))
+}
+
+
+plot(raster_natural_2015)
+plot(raster_natural_2040)
+plot(raster)
+
+shp_df <- as(shp, "data.frame")
+
 natural <- raster::extract(raster_natural_2015, shp, fun = mean, df= T)
 
-
 natural <- left_join(natural, raster::extract(raster_natural_2040, shp, fun = mean, df= T), by = "ID")
+
+library("writexl")
+
+write_xlsx(natural, "D:/MARRUECOS/Results/natural.xlsx")
+
+colnames(natural) <- c("ID", "y_2015", "y_2020", "y_2025", "y_2030", "y_2035", "y_2040")
+
+natural2 <- reshape2::melt(natural[,2:3])
+
+ggplot(natural2, aes(x=variable, y=value)) + 
+  geom_boxplot()
 
 natural2 <- raster::extract(raster_natural_2040, shp, fun = mean, df= T)
 
