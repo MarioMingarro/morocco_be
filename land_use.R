@@ -76,7 +76,7 @@ ggplot(natural2, aes(x=variable, y=value)) +
 library(readxl)
 basins <- read_excel("D:/MARRUECOS/Results/All_basins_results.xlsx", 
                      sheet = "Hoja2")
-
+library(PupillometryR)
 
 kk <- filter(basins, `14prior_rf_max_pres_20` == 3 & `26prior_rf_max_fut_20`== 3)
 
@@ -87,13 +87,36 @@ colnames(kk) <- c("ID", "2015", "2020", "2025", "2030", "2035", "2040")
 kk <- reshape2::melt(kk, id.vars='ID')
 
 ggplot(kk, aes(x=variable, y=value)) + 
-  geom_boxplot() +
+  geom_flat_violin(
+    trim = FALSE,
+    alpha = 0.5
+  ) +
+  geom_point(position = position_jitter(width = .2),
+             size = 2,
+             shape = 20, col = "ID")+
   geom_line(aes(group =  ID),
             alpha = 0.5, linetype=2, col = "gray")+
   ggtitle("Natural") +
   xlab("Year") +
   ylab("Land use probability") +
   theme_minimal()
+
+
+geom_flat_violin(
+  position = position_nudge(x = .1, y = 0),
+  trim = FALSE,
+  alpha = 0.5,
+  colour = NA
+) +
+  geom_point(position = position_jitter(width = .2),
+             size = 2,
+             shape = 20) +
+  geom_boxplot(
+    outlier.shape = NA,
+    alpha = .5,
+    width = .1,
+    colour = "black"
+  )
 
 # Irrigated plot
 kk <- kk[,15:20]
