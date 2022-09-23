@@ -63,6 +63,7 @@ for (i in 1:length(y)) {        # Bucle para calcular las estadisticas de todas 
 
 watershed <- unique(Data_2$`1pol_id`)
 
+
 # Tabla vacía para guardar los resultados 
 tabla_ind <- data.frame(
   "watershed" = character(),
@@ -75,17 +76,14 @@ tabla_ind <- data.frame(
   "Trend" = numeric(),
   "t" = numeric(),
   "p" = numeric(),
-  "95_max" = numeric(),
-  "95_min" = numeric(),
-  "F" = numeric(),
-  "Dif" = numeric()
+  "Dif_pvalue" = numeric()
 )
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
 for (n in 1:length(watershed)) {           
   ind <- Data_2 %>% 
-    filter(Data_2$`1pol_id` == watershed[270]) %>%
+    filter(Data_2$`1pol_id` == watershed[n]) %>%
     mutate(group = "i")             
         tabla <- data.frame(                          # Crea tabla vacia para despues unificar a tabla de resultados
           "watershed" = NA,
@@ -98,21 +96,18 @@ for (n in 1:length(watershed)) {
           "Trend" = NA,
           "t" = NA,
           "p" = NA,
-          "F" = NA,
-          "Dif_2_coef" = NA,
-          "Dif_2_pvalue" = NA,
-          "Dif_2_F" = NA
+          "Dif_pvalue" = NA
         )
         # General
         model_g <- lm(ind$value ~ ind$Year, data = Data_2)
         
         tabla$watershed <- unique(ind[[1]])
-        tabla$prior_pre_5 <- unique(ind[[3]])
-        tabla$prior_pre_10 <- unique(ind[[4]])
-        tabla$prior_pre_20 <- unique(ind[[5]])
-        tabla$prior_fut_5 <- unique(ind[[6]])
-        tabla$prior_fut_10 <- unique(ind[[7]])
-        tabla$prior_fut_20 <- unique(ind[[8]])
+        tabla$prior_pre_5  <- unique(ind[[2]])
+        tabla$prior_pre_10 <- unique(ind[[3]])
+        tabla$prior_pre_20 <- unique(ind[[4]])
+        tabla$prior_fut_5  <- unique(ind[[5]])
+        tabla$prior_fut_10 <- unique(ind[[6]])
+        tabla$prior_fut_20 <- unique(ind[[7]])
         
         model_i <-  lm(ind$value ~ ind$Year, data = ind)                
       
@@ -132,10 +127,15 @@ for (n in 1:length(watershed)) {
         model_int = lm(ind$value ~ ind$Year, data = dat)
         
         
-        tabla$Dif_2_coef <- summary(model_int)$coefficients[2,1]
-        tabla$Dif_2_pvalue <- summary(model_int)$coefficients[2,4]
-        tabla$Dif_2_F <- summary(model_int)$fstatistic[1]
+    
+        tabla$Dif_pvalue <- summary(model_int)$coefficients[2,4]
+       
+        
+        f <- anova(model_int)
+        
+        
         
         tabla_ind <- rbind(tabla_ind, tabla)  # Unimos tablas
         
       }
+
