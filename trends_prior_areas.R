@@ -1205,3 +1205,46 @@ for (n in 1:length(prior)) {
 
 tabla_pre_fut <- tabla_pre_fut[1:27,]
 
+Results <- rbind(tabla_pre, tabla_fut, tabla_pre_fut)
+writexl::write_xlsx(Results, "C:/GITHUB_REP/morocco_be/Results.xlsx")
+
+# PLOTS ----
+
+ggplot() + 
+  geom_smooth(data= top_5,  aes(x = Year, y = value), col = "black", fill = "black", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_10, aes(x = Year, y = value), col = "red", fill = "red", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_20, aes(x = Year, y = value), col = "blue", fill = "blue", method = "lm", alpha = .2)+
+  geom_smooth(data= Rest,   aes(x = Year, y = value), col = "green", fill = "green", method = "lm", alpha = .2)+
+  annotate("text", x = 2035, y=69, label = "Top 5", col = "black")+
+  annotate("text", x = 2035, y=68, label = "Top 10", col = "red")+
+  annotate("text", x = 2035, y=67, label = "Top 20", col = "blue")+
+  annotate("text", x = 2035, y=66, label = "Rest", col = "green")+
+  ggtitle("Natural (Present priority areas)")+
+  labs(x= "Year", y = "Land use probability")+
+  theme_minimal()
+
+ggplot() + 
+  geom_smooth(data= top_5,  aes(x = Year, y = value), col = "black", fill = "black", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_10, aes(x = Year, y = value), col = "red", fill = "red", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_20, aes(x = Year, y = value), col = "blue", fill = "blue", method = "lm", alpha = .2)+
+  geom_smooth(data= Rest,   aes(x = Year, y = value), col = "green", fill = "green", method = "lm", alpha = .2)+
+  annotate("text", x = 2017, y=3.2, label = "Top 5", col = "black")+
+  annotate("text", x = 2017, y=3.1, label = "Top 10", col = "red")+
+  annotate("text", x = 2017, y=3, label = "Top 20", col = "blue")+
+  annotate("text", x = 2017, y=2.9, label = "Rest", col = "green")+
+  ggtitle("Irrigated (Present priority areas)")+
+  labs(x= "Year", y = "Land use probability")+
+  theme_minimal()
+
+ggplot() + 
+  geom_smooth(data= top_5,  aes(x = Year, y = value), col = "black", fill = "black", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_10, aes(x = Year, y = value), col = "red", fill = "red", method = "lm", alpha = .2)+
+  geom_smooth(data= Top_20, aes(x = Year, y = value), col = "blue", fill = "blue", method = "lm", alpha = .2)+
+  geom_smooth(data= Rest,   aes(x = Year, y = value), col = "green", fill = "green", method = "lm", alpha = .2)+
+  annotate("text", x = 2037, y=9, label = "Top 5", col = "black")+
+  annotate("text", x = 2037, y=8, label = "Top 10", col = "red")+
+  annotate("text", x = 2037, y=7, label = "Top 20", col = "blue")+
+  annotate("text", x = 2037, y=6, label = "Rest", col = "green")+
+  ggtitle("Non-Irrigated (Present priority areas)")+
+  labs(x= "Year", y = "Land use probability")+
+  theme_minimal()
