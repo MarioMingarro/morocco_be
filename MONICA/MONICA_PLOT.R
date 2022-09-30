@@ -18,7 +18,7 @@ data3 <- read_excel("A:/MONICA/data_fig_1.xlsx",
 
 ################################################################################
 data <- read_excel("A:/MONICA/data_fig_2_2.xlsx", 
-                   sheet = "TMAX")
+                   sheet = "TMIN")
 
 datalogger_data <- filter(data, data$MODEL == "DATALOGGER")
 chelsa_data <- filter(data, data$MODEL == "CHELSA")
