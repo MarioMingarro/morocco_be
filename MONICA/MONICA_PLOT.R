@@ -79,7 +79,7 @@ datalogguer_tmin <- ggplot(datalogger_data)+
   geom_point(aes(x=date, y=Temp),col = "dodgerblue4")+
   geom_smooth(aes(x=date,y=Temp),col = "dodgerblue4", fill = "dodgerblue4", alpha = 0.2)+
   scale_x_discrete(name ="Date", 
-                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," ","Jul\n2012"," "," "," ",
+                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," "," ","Aug\n2012"," "," ",
                             "Oct\n2012"," "," ","Jan\n2013"," "," ","Apr\n2013"," ","Jun\n2013"))+
   xlab("Date") + ylab("Temperature (ºC)")+
   scale_y_continuous(limits = c(-30, 20))+
@@ -94,7 +94,7 @@ chelsa_tmin <- ggplot(chelsa_data)+
   geom_point(aes(x=date, y=Temp), col = "darkorange")+
   geom_smooth(aes(x=date,y=Temp), col = "darkorange", fill = "darkorange", alpha = 0.2)+
   scale_x_discrete(name ="Date", 
-                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," ","Jul\n2012"," "," "," ",
+                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," "," ","Aug\n2012"," "," ",
                             "Oct\n2012"," "," ","Jan\n2013"," "," ","Apr\n2013"," ","Jun\n2013"))+
   xlab("Date") + ylab("Temperature (ºC)")+
   scale_y_continuous(limits = c(-30, 20))+
@@ -110,7 +110,7 @@ microclima_tmin <- ggplot(microclima_data)+
   geom_point(aes(x=date, y=Temp), col = "darkolivegreen")+
   geom_smooth(aes(x=date,y=Temp), col = "darkolivegreen", fill = "darkolivegreen", alpha = 0.2)+
   scale_x_discrete(name ="Date", 
-                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," ","Jul\n2012"," "," "," ",
+                   limits=c("Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," "," ","Aug\n2012"," "," ",
                             "Oct\n2012"," "," ","Jan\n2013"," "," ","Apr\n2013"," ","Jun\n2013"))+
   xlab("Date") + ylab("Temperature (ºC)")+
   scale_y_continuous(limits = c(-30, 20))+
@@ -123,7 +123,7 @@ microclima_tmin <- ggplot(microclima_data)+
 
 ggarrange(datalogguer_tmax, chelsa_tmax, microclima_tmax, 
           datalogguer_tmin, chelsa_tmin, microclima_tmin,
-          labels = c("Datalogger\nTMax", "Mesoclimate", "Microclimate", "TMin"),
+          labels = c("Datalogger\nTMax", "Mesoclimate\n", "Microclimate\n", "TMin"),
           ncol = 3, nrow = 2, align = "v")
 
 "Oct\n2011"," "," ","Jan\n2012","","","Apr\n2012"," ","Jul\n2012"," "," "," ","Oct\n2012"," "," ","Jan\n2013"," "," ","Apr\n2013"," ","Jun\n2013"
