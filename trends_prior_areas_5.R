@@ -11,7 +11,7 @@ y <- "value" # Variables independiente
 ## Natural ----
 
 ### Top 5
-top_5_p_n <- filter(Data, Data$`12Class_rf_max_pres_5` == 3)
+top_5_p_n <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_n <- top_5_p_n[,c(8:13)]
 top_5_p_n <- as.data.frame(t(colMeans(na.omit(top_5_p_n))))
@@ -24,12 +24,12 @@ top_5_p_n <- pivot_longer(top_5_p_n,
 
 top_5_p_n <- top_5_p_n %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_p_n$Year <- as.numeric(top_5_p_n$Year)
 
 ### Rest_p_n
-Rest_p_n <- filter(Data, Data$`14Class_rf_max_pres_20` == 0|Data$`13Class_rf_max_pres_10` == 3|Data$`14Class_rf_max_pres_20` == 3)
+Rest_p_n <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_n <- Rest_p_n[,c(8:13)]
 Rest_p_n <- as.data.frame(t(colMeans(na.omit(Rest_p_n))))
@@ -42,7 +42,7 @@ Rest_p_n <- pivot_longer(Rest_p_n,
 
 Rest_p_n <- Rest_p_n %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_p_n$Year <- as.numeric(Rest_p_n$Year)
 
@@ -50,44 +50,44 @@ All <- rbind(top_5_p_n, Rest_p_n)
 
 # Tabla vacia para guardar los resultados 
 tabla_pre <- data.frame(
-  "Class" = character(),
+  "prior" = character(),
   "Trend" = numeric(),
   "t" = numeric(),
   "p" = numeric(),
   "Dif_pvalue" = numeric(),
-  "Class_dif" = character(),
-  "Land use" = character(), 
-  "Period" = character()
+  "prior_dif" = character(),
+  "land_use" = character(), 
+  "period" = character()
 )
 
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -98,12 +98,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Natural")
-    tabla$Period <- c("Present")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Natural")
+    tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
@@ -112,7 +112,7 @@ for (n in 1:length(Class)) {
 ## Irrigated -----
 
 ### Top 5
-top_5_p_i <- filter(Data, Data$`12Class_rf_max_pres_5` == 3)
+top_5_p_i <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_i <- top_5_p_i[,c(15:20)]
 top_5_p_i <- as.data.frame(t(colMeans(na.omit(top_5_p_i))))
@@ -125,12 +125,12 @@ top_5_p_i <- pivot_longer(top_5_p_i,
 
 top_5_p_i <- top_5_p_i %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_p_i$Year <- as.numeric(top_5_p_i$Year)
 
 ### Rest
-Rest_p_i <- filter(Data, Data$`14Class_rf_max_pres_20` == 0|Data$`13Class_rf_max_pres_10` == 3|Data$`14Class_rf_max_pres_20` == 3)
+Rest_p_i <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_i <- Rest_p_i[,c(15:20)]
 Rest_p_i <- as.data.frame(t(colMeans(na.omit(Rest_p_i))))
@@ -143,7 +143,7 @@ Rest_p_i <- pivot_longer(Rest_p_i,
 
 Rest_p_i <- Rest_p_i %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_p_i$Year <- as.numeric(Rest_p_i$Year)
 
@@ -152,31 +152,31 @@ All <- rbind(top_5_p_i, Rest_p_i)
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -187,12 +187,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Irrigated")
-    tabla$Period <- c("Present")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Irrigated")
+    tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
@@ -201,7 +201,7 @@ for (n in 1:length(Class)) {
 ## Non_Irrigated -----
 
 ### Top 5
-top_5_p_ni <- filter(Data, Data$`12Class_rf_max_pres_5` == 3)
+top_5_p_ni <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_ni <- top_5_p_ni[,c(22:27)]
 top_5_p_ni <- as.data.frame(t(colMeans(na.omit(top_5_p_ni))))
@@ -214,12 +214,12 @@ top_5_p_ni <- pivot_longer(top_5_p_ni,
 
 top_5_p_ni <- top_5_p_ni %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_p_ni$Year <- as.numeric(top_5_p_ni$Year)
 
 ### Rest
-Rest_p_ni <- filter(Data, Data$`14Class_rf_max_pres_20` == 0|Data$`13Class_rf_max_pres_10` == 3|Data$`14Class_rf_max_pres_20` == 3)
+Rest_p_ni <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_ni <- Rest_p_ni[,c(22:27)]
 Rest_p_ni <- as.data.frame(t(colMeans(na.omit(Rest_p_ni))))
@@ -232,7 +232,7 @@ Rest_p_ni <- pivot_longer(Rest_p_ni,
 
 Rest_p_ni <- Rest_p_ni %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_p_ni$Year <- as.numeric(Rest_p_ni$Year)
 
@@ -241,31 +241,31 @@ All <- rbind(top_5_p_ni, Rest_p_ni)
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -276,12 +276,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Non_Irrigated")
-    tabla$Period <- c("Present")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Non_Irrigated")
+    tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
@@ -291,7 +291,7 @@ for (n in 1:length(Class)) {
 ## Natural ----
 
 ### Top 5
-top_5_f_n <- filter(Data, Data$`24Class_rf_max_fut_5` == 3)
+top_5_f_n <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_n <- top_5_f_n[,c(8:13)]
 top_5_f_n <- as.data.frame(t(colMeans(na.omit(top_5_f_n))))
@@ -304,12 +304,12 @@ top_5_f_n <- pivot_longer(top_5_f_n,
 
 top_5_f_n <- top_5_f_n %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_f_n$Year <- as.numeric(top_5_f_n$Year)
 
 ### Rest_f_n
-Rest_f_n <- filter(Data, Data$`26Class_rf_max_fut_20` == 0|Data$`25Class_rf_max_fut_10` == 3|Data$`26Class_rf_max_fut_20` == 3)
+Rest_f_n <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_n <- Rest_f_n[,c(8:13)]
 Rest_f_n <- as.data.frame(t(colMeans(na.omit(Rest_f_n))))
@@ -322,7 +322,7 @@ Rest_f_n <- pivot_longer(Rest_f_n,
 
 Rest_f_n <- Rest_f_n %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_f_n$Year <- as.numeric(Rest_f_n$Year)
 
@@ -330,44 +330,44 @@ All <- rbind(top_5_f_n, Rest_f_n)
 
 # Tabla vacia para guardar los resultados 
 tabla_fut <- data.frame(
-  "Class" = character(),
+  "prior" = character(),
   "Trend" = numeric(),
   "t" = numeric(),
   "p" = numeric(),
   "Dif_pvalue" = numeric(),
-  "Class_dif" = character(),
-  "Land use" = character(), 
-  "Period" = character()
+  "prior_dif" = character(),
+  "land_use" = character(), 
+  "period" = character()
 )
 
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -378,12 +378,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Natural")
-    tabla$Period <- c("Future")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Natural")
+    tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
@@ -392,7 +392,7 @@ for (n in 1:length(Class)) {
 ## Irrigated -----
 
 ### Top 5
-top_5_f_i <- filter(Data, Data$`24Class_rf_max_fut_5` == 3)
+top_5_f_i <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_i <- top_5_f_i[,c(15:20)]
 top_5_f_i <- as.data.frame(t(colMeans(na.omit(top_5_f_i))))
@@ -405,12 +405,12 @@ top_5_f_i <- pivot_longer(top_5_f_i,
 
 top_5_f_i <- top_5_f_i %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_f_i$Year <- as.numeric(top_5_f_i$Year)
 
 ### Rest
-Rest_f_i <- filter(Data, Data$`26Class_rf_max_fut_20` == 0|Data$`25Class_rf_max_fut_10` == 3|Data$`26Class_rf_max_fut_20` == 3)
+Rest_f_i <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_i <- Rest_f_i[,c(15:20)]
 Rest_f_i <- as.data.frame(t(colMeans(na.omit(Rest_f_i))))
@@ -423,7 +423,7 @@ Rest_f_i <- pivot_longer(Rest_f_i,
 
 Rest_f_i <- Rest_f_i %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_f_i$Year <- as.numeric(Rest_f_i$Year)
 
@@ -432,31 +432,31 @@ All <- rbind(top_5_f_i, Rest_f_i)
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -467,12 +467,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Irrigated")
-    tabla$Period <- c("Future")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Irrigated")
+    tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
@@ -481,7 +481,7 @@ for (n in 1:length(Class)) {
 ## Non_Irrigated -----
 
 ### Top 5
-top_5_f_ni <- filter(Data, Data$`24Class_rf_max_fut_5` == 3)
+top_5_f_ni <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_ni <- top_5_f_ni[,c(22:27)]
 top_5_f_ni <- as.data.frame(t(colMeans(na.omit(top_5_f_ni))))
@@ -494,12 +494,12 @@ top_5_f_ni <- pivot_longer(top_5_f_ni,
 
 top_5_f_ni <- top_5_f_ni %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Top 5")
+  mutate(priority = "Top 5")
 
 top_5_f_ni$Year <- as.numeric(top_5_f_ni$Year)
 
 ### Rest
-Rest_f_ni <- filter(Data, Data$`26Class_rf_max_fut_20` == 0|Data$`25Class_rf_max_fut_10` == 3|Data$`26Class_rf_max_fut_20` == 3)
+Rest_f_ni <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_ni <- Rest_f_ni[,c(22:27)]
 Rest_f_ni <- as.data.frame(t(colMeans(na.omit(Rest_f_ni))))
@@ -512,7 +512,7 @@ Rest_f_ni <- pivot_longer(Rest_f_ni,
 
 Rest_f_ni <- Rest_f_ni %>%
   separate(year, c("Year", "Type"), "_") %>% 
-  mutate(Classity = "Rest")
+  mutate(priority = "Rest")
 
 Rest_f_ni$Year <- as.numeric(Rest_f_ni$Year)
 
@@ -521,31 +521,31 @@ All <- rbind(top_5_f_ni, Rest_f_ni)
 
 # Bucle para calcular las tendencias de cada una de las cuencas
 
-Class <- unique(All$Classity)
+prior <- unique(All$priority)
 
-for (n in 1:length(Class)) {           
+for (n in 1:length(prior)) {           
   ind <- All %>% 
-    filter(All$Classity == Class[n])
+    filter(All$priority == prior[n])
   
   
   tabla <- data.frame(
-    "Class" = NA,
+    "prior" = NA,
     "Trend" = NA,
     "t" = NA,
     "p" = NA,
     "Dif_pvalue" = NA,
-    "Class_dif" = NA,
-    "Land use" = NA,
-    "Period" = NA
+    "prior_dif" = NA,
+    "land_use" = NA,
+    "period" = NA
   )
-  kk <- Class[-n]
+  kk <- prior[-n]
   for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$Classity == kk[k])
+      filter(All$priority == kk[k])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
-    tabla$Class <- unique(ind[[4]])
+    tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
     
@@ -556,12 +556,12 @@ for (n in 1:length(Class)) {
     
     dat <- rbind(gen,ind)
     
-    model_int = lm(dat$value ~ dat$Year+dat$Classity, data = dat)
+    model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$Class_dif <- kk[k]
-    tabla$Land use <- c("Non_Irrigated")
-    tabla$Period <- c("Future")
+    tabla$prior_dif <- kk[k]
+    tabla$land_use <- c("Non_Irrigated")
+    tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
@@ -617,6 +617,8 @@ plot(leg)
 # Convert to a ggplot and print
 as_ggplot(leg)
 
-table.p <- ggtexttable(tabla_pre[, c(1:2, 5, 7:8)], rows = NULL, theme = ttheme("mOrange"))
+tabla_pre[,c(-1, -6:-8)] <- round(tabla_pre[,c(-1, -6:-8)],2)
+
+table.p <- ggtexttable(tabla_pre[, c(1:2, 7:8)], rows = NULL, theme = ttheme("mOrange"))
 
 ggarrange(pre, fut, table.p, labels = c("Present", "Future"), ncol = 2, nrow = 2)
