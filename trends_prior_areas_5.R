@@ -617,8 +617,10 @@ plot(leg)
 # Convert to a ggplot and print
 as_ggplot(leg)
 
-tabla_pre[,c(-1, -6:-8)] <- round(tabla_pre[,c(-1, -6:-8)],2)
+tabla_pre[,c(-1, -6:-8)] <- round(tabla_pre[,c(-1, -6:-8)],3)
+tabla_fut[,c(-1, -6:-8)] <- round(tabla_fut[,c(-1, -6:-8)],3)
+table.p <- ggtexttable(tabla_pre, rows = NULL, theme = ttheme("mOrange"))
+table.f <- ggtexttable(tabla_fut, rows = NULL, theme = ttheme("mOrange"))
 
-table.p <- ggtexttable(tabla_pre[, c(1:2, 7:8)], rows = NULL, theme = ttheme("mOrange"))
-
-ggarrange(pre, fut, table.p, labels = c("Present", "Future"), ncol = 2, nrow = 2)
+ggarrange(pre, fut, table.p, table.f, labels = c("Present", "Future"), ncol = 2, nrow = 2)
+ggarrange(table.p, table.f, labels = c("Present", "Future"), ncol = 2, nrow = 1)
