@@ -2,7 +2,7 @@ library(readxl)
 library(tidyverse)
 library(ggpubr)
 
-Data <- read_excel("All_basins_results.xlsx", sheet = "Hoja2")
+Data <- read_excel("All_basins_results_GIS.xlsx", sheet = "Hoja2")
 
 x <- "Year" # Variable dependiente
 y <- "value" # Variables independiente
@@ -80,10 +80,8 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -101,13 +99,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Natural")
     tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
-}
+
 
 ## Irrigated -----
 
@@ -169,10 +167,9 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
+           
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -190,13 +187,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Irrigated")
     tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
-}
+
 
 ## Non_Irrigated -----
 
@@ -258,10 +255,9 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
+           
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -279,13 +275,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Non_Irrigated")
     tabla$period <- c("Present")
     
     tabla_pre <- rbind(tabla_pre, tabla)  # Unimos tablas
   }
-}
+
 
 # FUTURO ----
 ## Natural ----
@@ -360,10 +356,9 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
+           
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -381,13 +376,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Natural")
     tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
-}
+
 
 ## Irrigated -----
 
@@ -449,10 +444,9 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
+            
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -470,13 +464,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Irrigated")
     tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
-}
+
 
 ## Non_Irrigated -----
 
@@ -538,10 +532,9 @@ for (n in 1:length(prior)) {
     "land_use" = NA,
     "period" = NA
   )
-  kk <- prior[-n]
-  for (k in 1:length(kk)) {           
+         
     gen <- All %>% 
-      filter(All$priority == kk[k])
+      filter(All$priority == prior[-n])
     
     model_g <- lm(ind$value ~ ind$Year, data = gen )
     
@@ -559,13 +552,13 @@ for (n in 1:length(prior)) {
     model_int = lm(dat$value ~ dat$Year+dat$priority, data = dat)
     
     tabla$Dif_pvalue <- summary(model_int)$coefficients[3,4]
-    tabla$prior_dif <- kk[k]
+    tabla$prior_dif <- prior[-n]
     tabla$land_use <- c("Non_Irrigated")
     tabla$period <- c("Future")
     
     tabla_fut <- rbind(tabla_fut, tabla)  # Unimos tablas
   }
-}
+
 
 
 # PLOTS ----
@@ -580,7 +573,17 @@ pre <- ggplot() +
   labs(x= "Year", y = "Land use probability")+
   scale_y_continuous(limits=c(0,80))+
   theme(
-    panel.background = element_rect(fill = "white"),
+    panel.background = element_blank(),
+    panel.grid.major.y = element_line(color = "gray80",
+                              size = 0.5,
+                              linetype = 2),
+    panel.grid.minor.y = element_line(color = "gray80",
+                                      size = 0.5,
+                                      linetype = 2),
+    axis.line = element_line(color = "gray80",
+                             size = 0.5),
+    axis.ticks = element_line(color = "gray80",
+                             size = 0.5),
     title = element_blank()
   )
 
@@ -594,12 +597,36 @@ fut <- ggplot() +
   geom_smooth(data= Rest_f_ni, aes(x = Year, y = value), col = "sienna4",   fill = "sienna4",   method = "lm", alpha = .2,linetype = "dashed")+
   labs(x= "Year", y = "Land use probability")+
   scale_y_continuous(limits=c(0,80))+
-  theme(
-    panel.background = element_rect(fill = "white"),
-    axis.text.y  = element_blank(),
-    axis.title.y = element_blank(),
-    title = element_blank()
+  theme(panel.background = element_blank(),
+        panel.grid.major.y = element_line(color = "gray80",
+                                          size = 0.5,
+                                          linetype = 2),
+        panel.grid.minor.y = element_line(color = "gray80",
+                                          size = 0.5,
+                                          linetype = 2),
+        axis.line = element_line(color = "gray80",
+                                 size = 0.5),
+        axis.ticks = element_line(color = "gray80",
+                                  size = 0.5),
+        axis.text.y  = element_blank(),
+        axis.title.y = element_blank(),
+        title = element_blank()
   )
+
+library(extrafont)
+
+ggarrange(
+  pre,
+  fut,
+  labels = c("Present", "Future"),
+  ncol = 2,
+  font.label = list(size = 14, color = "black", face = "bold", family = "Calibri"),
+  common.legend = TRUE, 
+  legend = "bottom"
+)
+
+
+
 # Extract the legend. Returns a table
 leg <- ggplot() + 
   geom_smooth(data= top_5_f_n,  aes(x = Year, y = value, col = "darkgreen"), fill = "white", method = "lm", alpha = .2)+
