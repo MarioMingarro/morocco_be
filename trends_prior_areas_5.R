@@ -625,7 +625,10 @@ ggarrange(
   legend = "bottom"
 )
 
+################################
 
+library(writexl)
+write_xlsx(tabla_fut, "T:/GITHUB_REP/morocco_be/tabla_fut.xlsx")
 
 # Extract the legend. Returns a table
 leg <- ggplot() + 
