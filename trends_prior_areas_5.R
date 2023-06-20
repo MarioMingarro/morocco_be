@@ -1,6 +1,7 @@
 library(readxl)
 library(tidyverse)
 library(ggpubr)
+library(matrixStats)
 
 Data <- read_excel("All_basins_results_GIS.xlsx", sheet = "Hoja2")
 
@@ -14,7 +15,7 @@ y <- "value" # Variables independiente
 top_5_p_n <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_n <- top_5_p_n[,c(8:13)]
-top_5_p_n <- as.data.frame(t(colMeans(na.omit(top_5_p_n))))
+top_5_p_n <- as.data.frame(t(colMedians(na.omit(top_5_p_n))))
 
 top_5_p_n <- pivot_longer(top_5_p_n, 
                       cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -32,7 +33,7 @@ top_5_p_n$Year <- as.numeric(top_5_p_n$Year)
 Rest_p_n <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_n <- Rest_p_n[,c(8:13)]
-Rest_p_n <- as.data.frame(t(colMeans(na.omit(Rest_p_n))))
+Rest_p_n <- as.data.frame(t(colMedians(na.omit(Rest_p_n))))
 
 Rest_p_n <- pivot_longer(Rest_p_n, 
                      cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -113,7 +114,7 @@ for (n in 1:length(prior)) {
 top_5_p_i <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_i <- top_5_p_i[,c(15:20)]
-top_5_p_i <- as.data.frame(t(colMeans(na.omit(top_5_p_i))))
+top_5_p_i <- as.data.frame(t(colMedians(na.omit(top_5_p_i))))
 
 top_5_p_i <- pivot_longer(top_5_p_i, 
                           cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -131,7 +132,7 @@ top_5_p_i$Year <- as.numeric(top_5_p_i$Year)
 Rest_p_i <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_i <- Rest_p_i[,c(15:20)]
-Rest_p_i <- as.data.frame(t(colMeans(na.omit(Rest_p_i))))
+Rest_p_i <- as.data.frame(t(colMedians(na.omit(Rest_p_i))))
 
 Rest_p_i <- pivot_longer(Rest_p_i, 
                          cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -201,7 +202,7 @@ for (n in 1:length(prior)) {
 top_5_p_ni <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_ni <- top_5_p_ni[,c(22:27)]
-top_5_p_ni <- as.data.frame(t(colMeans(na.omit(top_5_p_ni))))
+top_5_p_ni <- as.data.frame(t(colMedians(na.omit(top_5_p_ni))))
 
 top_5_p_ni <- pivot_longer(top_5_p_ni, 
                            cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -219,7 +220,7 @@ top_5_p_ni$Year <- as.numeric(top_5_p_ni$Year)
 Rest_p_ni <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_ni <- Rest_p_ni[,c(22:27)]
-Rest_p_ni <- as.data.frame(t(colMeans(na.omit(Rest_p_ni))))
+Rest_p_ni <- as.data.frame(t(colMedians(na.omit(Rest_p_ni))))
 
 Rest_p_ni <- pivot_longer(Rest_p_ni, 
                           cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -290,7 +291,7 @@ for (n in 1:length(prior)) {
 top_5_f_n <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_n <- top_5_f_n[,c(8:13)]
-top_5_f_n <- as.data.frame(t(colMeans(na.omit(top_5_f_n))))
+top_5_f_n <- as.data.frame(t(colMedians(na.omit(top_5_f_n))))
 
 top_5_f_n <- pivot_longer(top_5_f_n, 
                           cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -308,7 +309,7 @@ top_5_f_n$Year <- as.numeric(top_5_f_n$Year)
 Rest_f_n <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_n <- Rest_f_n[,c(8:13)]
-Rest_f_n <- as.data.frame(t(colMeans(na.omit(Rest_f_n))))
+Rest_f_n <- as.data.frame(t(colMedians(na.omit(Rest_f_n))))
 
 Rest_f_n <- pivot_longer(Rest_f_n, 
                          cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural", "2040_Natural"),
@@ -390,7 +391,7 @@ for (n in 1:length(prior)) {
 top_5_f_i <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_i <- top_5_f_i[,c(15:20)]
-top_5_f_i <- as.data.frame(t(colMeans(na.omit(top_5_f_i))))
+top_5_f_i <- as.data.frame(t(colMedians(na.omit(top_5_f_i))))
 
 top_5_f_i <- pivot_longer(top_5_f_i, 
                           cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -408,7 +409,7 @@ top_5_f_i$Year <- as.numeric(top_5_f_i$Year)
 Rest_f_i <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_i <- Rest_f_i[,c(15:20)]
-Rest_f_i <- as.data.frame(t(colMeans(na.omit(Rest_f_i))))
+Rest_f_i <- as.data.frame(t(colMedians(na.omit(Rest_f_i))))
 
 Rest_f_i <- pivot_longer(Rest_f_i, 
                          cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -478,7 +479,7 @@ for (n in 1:length(prior)) {
 top_5_f_ni <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_ni <- top_5_f_ni[,c(22:27)]
-top_5_f_ni <- as.data.frame(t(colMeans(na.omit(top_5_f_ni))))
+top_5_f_ni <- as.data.frame(t(colMedians(na.omit(top_5_f_ni))))
 
 top_5_f_ni <- pivot_longer(top_5_f_ni, 
                            cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -496,7 +497,7 @@ top_5_f_ni$Year <- as.numeric(top_5_f_ni$Year)
 Rest_f_ni <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_ni <- Rest_f_ni[,c(22:27)]
-Rest_f_ni <- as.data.frame(t(colMeans(na.omit(Rest_f_ni))))
+Rest_f_ni <- as.data.frame(t(colMedians(na.omit(Rest_f_ni))))
 
 Rest_f_ni <- pivot_longer(Rest_f_ni, 
                           cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -564,13 +565,13 @@ for (n in 1:length(prior)) {
 # PLOTS ----
 ## Present -----
 pre <- ggplot() + 
-  geom_smooth(data= top_5_p_n,  aes(x = Year, y = value), col = "darkgreen", fill = "darkgreen", method = "lm", alpha = .2)+
+  geom_smooth(data= top_5_p_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2)+
   geom_smooth(data= top_5_p_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2)+
   geom_smooth(data= top_5_p_ni, aes(x = Year, y = value), col = "sienna4", fill = "sienna4", method = "lm", alpha = .2)+
-  geom_smooth(data= Rest_p_n,  aes(x = Year, y = value), col = "darkgreen", fill = "darkgreen", method = "lm", alpha = .2,linetype = "dashed")+
+  geom_smooth(data= Rest_p_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2,linetype = "dashed")+
   geom_smooth(data= Rest_p_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2,linetype = "dashed")+
   geom_smooth(data= Rest_p_ni, aes(x = Year, y = value), col = "sienna4",   fill = "sienna4",   method = "lm", alpha = .2,linetype = "dashed")+
-  labs(x= "Year", y = "Land use probability")+
+  labs(x= "Year", y = "Median Land Coverage probability")+
   scale_y_continuous(limits=c(0,80))+
   theme(
     panel.background = element_blank(),
@@ -584,18 +585,20 @@ pre <- ggplot() +
                              size = 0.5),
     axis.ticks = element_line(color = "gray80",
                              size = 0.5),
+    axis.text=element_text(size=12),
+    axis.title=element_text(size=12),
     title = element_blank()
   )
 
 ## Future -----
 fut <- ggplot() + 
-  geom_smooth(data= top_5_f_n,  aes(x = Year, y = value), col = "darkgreen", fill = "darkgreen", method = "lm", alpha = .2)+
+  geom_smooth(data= top_5_f_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2)+
   geom_smooth(data= top_5_f_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2)+
   geom_smooth(data= top_5_f_ni, aes(x = Year, y = value), col = "sienna4", fill = "sienna4", method = "lm", alpha = .2)+
-  geom_smooth(data= Rest_f_n,  aes(x = Year, y = value), col = "darkgreen", fill = "darkgreen", method = "lm", alpha = .2,linetype = "dashed")+
+  geom_smooth(data= Rest_f_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2,linetype = "dashed")+
   geom_smooth(data= Rest_f_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2,linetype = "dashed")+
   geom_smooth(data= Rest_f_ni, aes(x = Year, y = value), col = "sienna4",   fill = "sienna4",   method = "lm", alpha = .2,linetype = "dashed")+
-  labs(x= "Year", y = "Land use probability")+
+  labs(x= "Year", y = "Mean Land Coverage probability")+
   scale_y_continuous(limits=c(0,80))+
   theme(panel.background = element_blank(),
         panel.grid.major.y = element_line(color = "gray80",
@@ -610,6 +613,8 @@ fut <- ggplot() +
                                   size = 0.5),
         axis.text.y  = element_blank(),
         axis.title.y = element_blank(),
+        axis.text=element_text(size=12),
+        axis.title=element_text(size=12),
         title = element_blank()
   )
 
@@ -618,9 +623,7 @@ library(extrafont)
 ggarrange(
   pre,
   fut,
-  labels = c("Present", "Future"),
   ncol = 2,
-  font.label = list(size = 14, color = "black", face = "bold", family = "Calibri"),
   common.legend = TRUE, 
   legend = "bottom"
 )
