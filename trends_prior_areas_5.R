@@ -3,7 +3,7 @@ library(tidyverse)
 library(ggpubr)
 library(matrixStats)
 
-Data <- read_excel("All_basins_results_GIS.xlsx", sheet = "Hoja2")
+Data <- read_excel("./All_basins_results_GIS.xlsx", sheet = "Individual_trends")
 
 x <- "Year" # Variable dependiente
 y <- "value" # Variables independiente
@@ -15,7 +15,9 @@ y <- "value" # Variables independiente
 top_5_p_n <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_n <- top_5_p_n[,c(8:13)]
-top_5_p_n <- as.data.frame(t(colMedians(na.omit(top_5_p_n))))
+names <- colnames(top_5_p_n)
+top_5_p_n <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_p_n)))))
+colnames(top_5_p_n) <- names
 
 top_5_p_n <- pivot_longer(top_5_p_n, 
                       cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -33,7 +35,10 @@ top_5_p_n$Year <- as.numeric(top_5_p_n$Year)
 Rest_p_n <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_n <- Rest_p_n[,c(8:13)]
-Rest_p_n <- as.data.frame(t(colMedians(na.omit(Rest_p_n))))
+names <- colnames(Rest_p_n)
+Rest_p_n <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_p_n)))))
+colnames(Rest_p_n) <- names
+
 
 Rest_p_n <- pivot_longer(Rest_p_n, 
                      cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -114,7 +119,11 @@ for (n in 1:length(prior)) {
 top_5_p_i <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_i <- top_5_p_i[,c(15:20)]
-top_5_p_i <- as.data.frame(t(colMedians(na.omit(top_5_p_i))))
+names <- colnames(top_5_p_i)
+
+top_5_p_i <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_p_i)))))
+
+colnames(top_5_p_i) <- names
 
 top_5_p_i <- pivot_longer(top_5_p_i, 
                           cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -132,7 +141,10 @@ top_5_p_i$Year <- as.numeric(top_5_p_i$Year)
 Rest_p_i <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_i <- Rest_p_i[,c(15:20)]
-Rest_p_i <- as.data.frame(t(colMedians(na.omit(Rest_p_i))))
+names <- colnames(Rest_p_i)
+
+Rest_p_i <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_p_i)))))
+colnames(Rest_p_i) <- names
 
 Rest_p_i <- pivot_longer(Rest_p_i, 
                          cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -202,8 +214,11 @@ for (n in 1:length(prior)) {
 top_5_p_ni <- filter(Data, Data$`12prior_rf_max_pres_5` == 3)
 
 top_5_p_ni <- top_5_p_ni[,c(22:27)]
-top_5_p_ni <- as.data.frame(t(colMedians(na.omit(top_5_p_ni))))
+names <- colnames(top_5_p_ni)
 
+top_5_p_ni <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_p_ni)))))
+
+colnames(top_5_p_ni) <- names
 top_5_p_ni <- pivot_longer(top_5_p_ni, 
                            cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
                            names_to = "year" ,
@@ -220,7 +235,11 @@ top_5_p_ni$Year <- as.numeric(top_5_p_ni$Year)
 Rest_p_ni <- filter(Data, Data$`14prior_rf_max_pres_20` == 0|Data$`13prior_rf_max_pres_10` == 3|Data$`14prior_rf_max_pres_20` == 3)
 
 Rest_p_ni <- Rest_p_ni[,c(22:27)]
-Rest_p_ni <- as.data.frame(t(colMedians(na.omit(Rest_p_ni))))
+names <- colnames(Rest_p_ni)
+
+colnames(Rest_p_ni) <- names
+Rest_p_ni <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_p_ni)))))
+colnames(Rest_p_ni) <- names
 
 Rest_p_ni <- pivot_longer(Rest_p_ni, 
                           cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -291,7 +310,10 @@ for (n in 1:length(prior)) {
 top_5_f_n <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_n <- top_5_f_n[,c(8:13)]
-top_5_f_n <- as.data.frame(t(colMedians(na.omit(top_5_f_n))))
+names <- colnames(top_5_f_n)
+top_5_f_n <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_f_n)))))
+colnames(top_5_f_n) <- names
+
 
 top_5_f_n <- pivot_longer(top_5_f_n, 
                           cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural","2040_Natural"),
@@ -309,7 +331,10 @@ top_5_f_n$Year <- as.numeric(top_5_f_n$Year)
 Rest_f_n <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_n <- Rest_f_n[,c(8:13)]
-Rest_f_n <- as.data.frame(t(colMedians(na.omit(Rest_f_n))))
+names <- colnames(Rest_f_n)
+Rest_f_n <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_f_n)))))
+colnames(Rest_f_n) <- names
+
 
 Rest_f_n <- pivot_longer(Rest_f_n, 
                          cols = c("2015_Natural", "2020_Natural", "2025_Natural", "2030_Natural", "2035_Natural", "2040_Natural"),
@@ -391,7 +416,10 @@ for (n in 1:length(prior)) {
 top_5_f_i <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_i <- top_5_f_i[,c(15:20)]
-top_5_f_i <- as.data.frame(t(colMedians(na.omit(top_5_f_i))))
+names <- colnames(top_5_f_i)
+top_5_f_i <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_f_i)))))
+colnames(top_5_f_i) <- names
+
 
 top_5_f_i <- pivot_longer(top_5_f_i, 
                           cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -409,7 +437,10 @@ top_5_f_i$Year <- as.numeric(top_5_f_i$Year)
 Rest_f_i <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_i <- Rest_f_i[,c(15:20)]
-Rest_f_i <- as.data.frame(t(colMedians(na.omit(Rest_f_i))))
+names <- colnames(Rest_f_i)
+Rest_f_i <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_f_i)))))
+colnames(Rest_f_i) <- names
+
 
 Rest_f_i <- pivot_longer(Rest_f_i, 
                          cols = c("2015_Irrigated", "2020_Irrigated", "2025_Irrigated", "2030_Irrigated", "2035_Irrigated","2040_Irrigated"),
@@ -479,7 +510,10 @@ for (n in 1:length(prior)) {
 top_5_f_ni <- filter(Data, Data$`24prior_rf_max_fut_5` == 3)
 
 top_5_f_ni <- top_5_f_ni[,c(22:27)]
-top_5_f_ni <- as.data.frame(t(colMedians(na.omit(top_5_f_ni))))
+names <- colnames(top_5_f_ni)
+top_5_f_ni <- as.data.frame(t(colMedians(as.matrix(na.omit(top_5_f_ni)))))
+colnames(top_5_f_ni) <- names
+
 
 top_5_f_ni <- pivot_longer(top_5_f_ni, 
                            cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
@@ -497,7 +531,10 @@ top_5_f_ni$Year <- as.numeric(top_5_f_ni$Year)
 Rest_f_ni <- filter(Data, Data$`26prior_rf_max_fut_20` == 0|Data$`25prior_rf_max_fut_10` == 3|Data$`26prior_rf_max_fut_20` == 3)
 
 Rest_f_ni <- Rest_f_ni[,c(22:27)]
-Rest_f_ni <- as.data.frame(t(colMedians(na.omit(Rest_f_ni))))
+names <- colnames(Rest_f_ni)
+Rest_f_ni <- as.data.frame(t(colMedians(as.matrix(na.omit(Rest_f_ni)))))
+colnames(Rest_f_ni) <- names
+
 
 Rest_f_ni <- pivot_longer(Rest_f_ni, 
                           cols = c("2015_Non_Irrigated", "2020_Non_Irrigated", "2025_Non_Irrigated", "2030_Non_Irrigated", "2035_Non_Irrigated","2040_Non_Irrigated"),
