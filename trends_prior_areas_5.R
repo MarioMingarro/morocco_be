@@ -94,7 +94,7 @@ for (n in 1:length(prior)) {
     tabla$prior <- unique(ind[[4]])
     
     model_i <-  lm(ind$value ~ ind$Year, data = ind)                
-    
+    summary(model_i)
     
     tabla$Trend <- model_i$coefficients[[2]]
     tabla$t <- summary(model_i)$coefficients[2, 3]
@@ -598,62 +598,75 @@ for (n in 1:length(prior)) {
   }
 
 
-
+writexl::write_xlsx(tabla_pre, "D:/MARRUECOS/tabla_pre.xlsx")
+writexl::write_xlsx(tabla_fut, "D:/MARRUECOS/tabla_fut.xlsx")
 # PLOTS ----
 ## Present -----
 pre <- ggplot() + 
-  geom_smooth(data= top_5_p_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2)+
-  geom_smooth(data= top_5_p_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2)+
-  geom_smooth(data= top_5_p_ni, aes(x = Year, y = value), col = "sienna4", fill = "sienna4", method = "lm", alpha = .2)+
-  geom_smooth(data= Rest_p_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2,linetype = "dashed")+
-  geom_smooth(data= Rest_p_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2,linetype = "dashed")+
-  geom_smooth(data= Rest_p_ni, aes(x = Year, y = value), col = "sienna4",   fill = "sienna4",   method = "lm", alpha = .2,linetype = "dashed")+
-  labs(x= "Year", y = "Median Land Coverage probability")+
+  geom_smooth(data= top_5_p_n,  aes(x = Year, y = value), col = "yellowgreen", se = F, method = "lm")+
+  geom_point(data= top_5_p_n,  aes(x = Year, y = value), col = "yellowgreen", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= top_5_p_i,  aes(x = Year, y = value), col = "yellow2", se = F, method = "lm")+
+  geom_point(data= top_5_p_i,  aes(x = Year, y = value), col = "yellow2", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= top_5_p_ni, aes(x = Year, y = value), col = "tan4", se = F, method = "lm")+
+  geom_point(data= top_5_p_ni,  aes(x = Year, y = value), col = "tan4", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= Rest_p_n,  aes(x = Year, y = value), col = "yellowgreen", se = F, method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_p_n,  aes(x = Year, y = value), col = "yellowgreen", alpha = .5, size = 2, shape = 17)+
+  geom_smooth(data= Rest_p_i,  aes(x = Year, y = value), col = "yellow2",se = F, method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_p_i,  aes(x = Year, y = value), col = "yellow2", alpha = .5, size = 2, shape = 17)+
+  geom_smooth(data= Rest_p_ni, aes(x = Year, y = value), col = "tan4",   se = F,   method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_p_ni,  aes(x = Year, y = value), col = "tan4", alpha = .5, size = 2, shape = 17)+
+  labs(x= "Year", y = "Land use probability")+
   scale_y_continuous(limits=c(0,80))+
   theme(
     panel.background = element_blank(),
     panel.grid.major.y = element_line(color = "gray80",
-                              size = 0.5,
-                              linetype = 2),
+                                      size = 0.5,
+                                      linetype = 2),
     panel.grid.minor.y = element_line(color = "gray80",
                                       size = 0.5,
                                       linetype = 2),
     axis.line = element_line(color = "gray80",
                              size = 0.5),
     axis.ticks = element_line(color = "gray80",
-                             size = 0.5),
-    axis.text=element_text(size=12),
-    axis.title=element_text(size=12),
-    title = element_blank()
+                              size = 0.5),
+    axis.title.x = element_blank(),
+    legend.position='none'
   )
+
 
 ## Future -----
 fut <- ggplot() + 
-  geom_smooth(data= top_5_f_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2)+
-  geom_smooth(data= top_5_f_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2)+
-  geom_smooth(data= top_5_f_ni, aes(x = Year, y = value), col = "sienna4", fill = "sienna4", method = "lm", alpha = .2)+
-  geom_smooth(data= Rest_f_n,  aes(x = Year, y = value), col = "darkolivegreen4", fill = "darkolivegreen4", method = "lm", alpha = .2,linetype = "dashed")+
-  geom_smooth(data= Rest_f_i,  aes(x = Year, y = value), col = "darkgoldenrod1", fill = "darkgoldenrod1", method = "lm", alpha = .2,linetype = "dashed")+
-  geom_smooth(data= Rest_f_ni, aes(x = Year, y = value), col = "sienna4",   fill = "sienna4",   method = "lm", alpha = .2,linetype = "dashed")+
-  labs(x= "Year", y = "Mean Land Coverage probability")+
+  geom_smooth(data= top_5_f_n,  aes(x = Year, y = value), col = "yellowgreen", se = F, method = "lm")+
+  geom_point(data= top_5_f_n,  aes(x = Year, y = value), col = "yellowgreen", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= top_5_f_i,  aes(x = Year, y = value), col = "yellow2", se = F, method = "lm")+
+  geom_point(data= top_5_f_i,  aes(x = Year, y = value), col = "yellow2", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= top_5_f_ni, aes(x = Year, y = value), col = "tan4", se = F, method = "lm")+
+  geom_point(data= top_5_f_ni,  aes(x = Year, y = value), col = "tan4", alpha = .5, size = 2, shape = 16)+
+  geom_smooth(data= Rest_f_n,  aes(x = Year, y = value), col = "yellowgreen", se = F, method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_f_n,  aes(x = Year, y = value), col = "yellowgreen", alpha = .5, size = 2, shape = 17)+
+  geom_smooth(data= Rest_f_i,  aes(x = Year, y = value), col = "yellow2", se = F, method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_f_i,  aes(x = Year, y = value), col = "yellow2", alpha = .5, size = 2, shape = 17)+
+  geom_smooth(data= Rest_f_ni, aes(x = Year, y = value), col = "tan4",  se = F,   method = "lm",linetype = "dashed")+
+  geom_point(data= Rest_f_ni,  aes(x = Year, y = value), col = "tan4", alpha = .5, size = 2, shape = 17)+
+  labs(x= "Year", y = "Land use probability")+
   scale_y_continuous(limits=c(0,80))+
-  theme(panel.background = element_blank(),
-        panel.grid.major.y = element_line(color = "gray80",
-                                          size = 0.5,
-                                          linetype = 2),
-        panel.grid.minor.y = element_line(color = "gray80",
-                                          size = 0.5,
-                                          linetype = 2),
-        axis.line = element_line(color = "gray80",
-                                 size = 0.5),
-        axis.ticks = element_line(color = "gray80",
-                                  size = 0.5),
-        axis.text.y  = element_blank(),
-        axis.title.y = element_blank(),
-        axis.text=element_text(size=12),
-        axis.title=element_text(size=12),
-        title = element_blank()
+  theme(
+    panel.background = element_blank(),
+    panel.grid.major.y = element_line(color = "gray80",
+                                      size = 0.5,
+                                      linetype = 2),
+    panel.grid.minor.y = element_line(color = "gray80",
+                                      size = 0.5,
+                                      linetype = 2),
+    axis.line = element_line(color = "gray80",
+                             size = 0.5),
+    axis.ticks = element_line(color = "gray80",
+                              size = 0.5),
+    axis.text.y = element_blank(),
+    axis.title = element_blank(),
+    legend.position='none'
   )
+
 
 library(extrafont)
 
